@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "wordvore",
+  "description": "devour new vocabulary!",
+  "version": "0.0.1",
+
+  "icons": {
+    "96": "icons/icon96.png",
+    "64": "icons/icon.png",
+    "32": "icons/icon32.png"
+  },
+
+  "background": {
+    "scripts": ["background_script.js"]
+  },
+
+  "action": {
+    "default_icon": {
+      "64": "icons/icon.png"
+    },
+    "default_popup": "browserAction/index.html",
+    "default_title": "wordvore"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"]
+    }
+  ],
+
+  "host_permissions": [
+    "*://api.dictionaryapi.dev/*",
+    "<all_urls>"
+  ],
+
+  "permissions": [
+      "activeTab",
+      "contextMenus",
+      "clipboardWrite",
+      "storage",
+      "clipboardRead",
+      "scripting",
+      "webRequest",
+      "webRequestBlocking", 
+      "webNavigation"
+  ]
+}
