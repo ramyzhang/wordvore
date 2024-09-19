@@ -5,23 +5,30 @@
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>wordvore</h1>
-    <!-- ERRORS -->
-    <p id="err-noWord" style="display:none">i'm hungry... gimme a word!</p>
-    <p id="err-wrongWord" style="display:none">that one doesn't taste right... try again!</p>
+    <div class="voreAnim"></div>
+    <div class="wordvore">
+      <h1>wordvore</h1>
+      <!-- ERRORS -->
+      <p id="err-noWord" style="display:none">i'm hungry... gimme a word!</p>
+      <p id="err-wrongWord" style="display:none">that one doesn't taste right... try again!</p>
 
-    <!-- FORM -->
-    <form id="wordvore">
-      <input type="text" id="textField" name="textField">
-      <input type="submit" value="vore">
-    </form>
+      <!-- FORM -->
+      <form id="wordvore">
+        <input type="text" id="textField" name="textField">
+        <input type="submit" value="vore">
+      </form>
+    </div>
 
     <!-- DEFINITION -->
-    <h3 id="word"></h3>
-    <p id="phonetics"></p>
-    <button id="saveWord" style="display:none">save</button>
-    <p id="meanings">
-    </p>
+    <div class="definition" style="display:none" id="definition">
+      <div class="definitionHeader" id="definitionHeader">
+        <h3 id="word"></h3>
+        <p id="phonetics"></p>
+        <button id="saveWord" style="display:none" class="saveButton">save</button>
+      </div>
+      <p id="meanings"></p>
+    </div>
+    
     <script src="script.js" type="module"></script>
   </body>
 </html>

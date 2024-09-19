@@ -90,6 +90,9 @@ function addDefinitions(definitions) {
         })
         meaningsComponent.appendChild(meaningsList);
     });
+    
+    document.getElementById("definition").style.display = "block";
+    document.getElementById("definitionHeader").scrollIntoView({ block: 'start',  behavior: 'smooth' });
 }
 
 // Send a message to the background script to save the current word to storage!
