@@ -3,13 +3,19 @@
   to { background-position: -9600px; visibility: hidden; }
 }
 
+@keyframes logo-in {
+  0% { scale: 0; }
+  70% { scale: 1.3; }
+  100%  { scale: 1; }
+}
+
 html {
   min-width: 400px;
   max-width: 400px;
   height: 300px;
   max-height: 300px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: clip;
   padding: 0px;
 }
 
@@ -18,7 +24,7 @@ body {
   margin: 0px;
   max-height: 300px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 textarea {
@@ -53,13 +59,18 @@ h3 {
   margin: 0;
 }
 
-img.logo {
+div.logo {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 1;
+  scale: 0;
+  animation: logo-in 0.5s ease-in-out 3s 1 normal forwards;
+}
+
+img.logo {
   height: 30px;
   width: 30px;
-  z-index: 1,
 }
 
 div.wordvore {
@@ -71,7 +82,6 @@ div.wordvore {
   line-height: 0%;
   row-gap: 10px;
   position: relative;
-  z-index: 1,
 }
 
 div.wordOfTheDay {

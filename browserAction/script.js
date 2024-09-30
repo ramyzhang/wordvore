@@ -156,7 +156,10 @@ function sendWordToBackground() {
         console.error("Wasn't able to send word to background script: " + err);
     });
 
-    document.getElementById("definition").style.display = "none";
+    document.body.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    setTimeout(() => {
+        document.getElementById("definition").style.display = "none";
+    }, 500);
 }
 
 function displayError(errorCode, displayBool) {
