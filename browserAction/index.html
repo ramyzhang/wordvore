@@ -5,15 +5,20 @@
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="voreAnim"></div>
     <div class="wordvore">
-      <h1>wordvore</h1>
+      <div class="voreAnim"></div>
+      <img src="../icons/icon.png" alt="Wordvore Logo" class="logo" id="logo" style="display:none;" />
+      <h1 id="wordLogo">wordvore</h1>
       <!-- ERRORS -->
       <p id="err-noWord" style="display:none">i'm hungry... gimme a word!</p>
       <p id="err-wrongWord" style="display:none">that one doesn't taste right... try again!</p>
 
-      <div class="wordOfTheDay">
-        <p id="wordOfTheDayDefinition"></p>
+      <div class="wordOfTheDay" id="wordOfTheDay" style="display:none">
+        <div class="wotdHeader">
+          <h3 id="wotdDefinition"></h3>
+          <p id="wotdPhonetics"></p> 
+        </div>
+        <p id="wotdMeaning"></p>
       </div>
       
       <!-- FORM -->

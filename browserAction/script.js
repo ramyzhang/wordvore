@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then(() => {
         return browser.runtime.sendMessage({ action: "getWordOfTheDay" });
     }).then((res) => {
-        if (res.wordOfTheDay) {
-            document.getElementById("wordOfTheDayDefinition").textContent = res.wordOfTheDay.word;
+        if (res) {
+            return addWordOfTheDay(res);
         }
-    }).catch(() => {
-        console.log("Didn't get a word.");
+    }).catch((err) => {
+        console.log("Didn't get a word: " + err);
     });
 })
 
@@ -101,6 +101,34 @@ function addDefinitions(definitions) {
     document.getElementById("definitionHeader").scrollIntoView({ block: 'start',  behavior: 'smooth' });
 }
 
+function addWordOfTheDay(wordObject) {
+    const wotdMeaning = document.getElementById("wotdMeaning");
+    document.getElementById("wotdDefinition").textContent = wordObject.word;
+    document.getElementById("wotdPhonetics").textContent = wordObject.phonetics;
+
+    wotdMeaning.innerHTML = '';
+
+    var randomMeaning = wordObject.meanings[wordObject.meanings.length * Math.random() << 0];
+    var randomDefn = randomMeaning.definitions[randomMeaning.definitions.length * Math.random() << 0];
+
+    wotdMeaning.innerHTML += `<i>${randomMeaning.partOfSpeech}</i> | `;
+    
+    const defComponent = document.createTextNode("def. " + randomDefn.def);
+    wotdMeaning.appendChild(defComponent);
+
+    if (randomDefn.example) {
+        const ul = document.createElement("ul");
+        const subli = document.createElement("li");
+        subli.textContent = "ex. " + randomDefn.example;
+        ul.appendChild(subli);
+        wotdMeaning.appendChild(ul);
+    }
+
+    document.getElementById("logo").style.display = "block";
+    document.getElementById("wordOfTheDay").style.display = "flex";
+    document.getElementById("wordLogo").style.display = "none";
+}
+
 // Send a message to the background script to save the current word to storage!
 function sendWordToBackground() {
     if (!currentWord) {
@@ -113,6 +141,8 @@ function sendWordToBackground() {
     browser.runtime.sendMessage({ action: "saveWord", word: currentWord }).catch((err) => {
         console.error("Wasn't able to send word to background script: " + err);
     });
+
+    document.getElementById("definition").style.display = "none";
 }
 
 function displayError(errorCode, displayBool) {

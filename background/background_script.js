@@ -1,4 +1,4 @@
-import { getRandomInt } from "./random_helper";
+import { getRandomInt } from "./random_helper.js";
 
 browser.runtime.onInstalled.addListener(() => {
     // Callback reads runtime.lastError to prevent an unchecked error from being 
@@ -10,25 +10,27 @@ browser.runtime.onInstalled.addListener(() => {
         contexts: ["selection", "editable"],
     },
     () => void browser.runtime.lastError,
-    );
-})
+    );  
+});
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
+browser.contextMenus.onClicked.addListener((info) => {
     if (info.menuItemId === "add-to-wordvore") {
         const tempWord = { 
             text: `${info.selectionText}`
         };
 
         // choose the word of the day to send
-        let allWords = browser.storage.local.get();
         var wordOfTheDay;
-        if (allWords.length() == 0) {
-            allWords = null;
-            wordOfTheDay = null;
-        } else {
-            var randomIndex = getRandomInt(0, allWords.length())
-            wordOfTheDay = allWords[randomIndex];
-        }
+        browser.storage.local.get().then((res) => {
+            if (res.length == 0) {
+                wordOfTheDay = null;
+            } else {
+                var keys = Object.keys(res);
+                wordOfTheDay = res[keys[keys.length * Math.random() << 0]];
+            }
+
+            return wordOfTheDay;
+        });
         
         // Open the extension popup and send the current selection to it
         browser.action.openPopup().then(() => {
@@ -41,7 +43,7 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
             console.error(error);
         });
     }
-});
+});  
 
 // Listen for requests from the popup once it's open to get the stored selected text (if any)
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -60,7 +62,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
             return true;
         case "saveWord":
-            browser.storage.local.get(message.word.word).then((res) => {
+            browser.storage.local.get(message.word.word).then((res) => {                
                 if (!res[message.word.word]) {
                     return browser.storage.local.set({ [message.word.word]: message.word });
                 }
@@ -78,8 +80,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }).catch((err) => {
                 console.log("Couldn't get word of the day.");
             });
-
-            return true;
         default:
             return true;
     }

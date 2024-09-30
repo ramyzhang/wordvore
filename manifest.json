@@ -18,7 +18,8 @@
   },
 
   "background": {
-    "scripts": ["background/background_script.js"]
+    "scripts": ["background/background_script.js"],
+    "type": "module"
   },
 
   "action": {
