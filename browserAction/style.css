@@ -1,6 +1,6 @@
 @keyframes sprite {
   from { background-position: 0px; visibility: visible; }
-  to { background-position: 9600px; visibility: hidden; }
+  to { background-position: -9600px; visibility: hidden; }
 }
 
 html {
