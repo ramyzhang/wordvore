@@ -36,6 +36,10 @@ div.wordvore {
   justify-content: center;
 }
 
+div.wordOfTheDay {
+  background-color: blanchedalmond;
+}
+
 div.voreAnim {
   height: 300px;
   width: 400px;
@@ -59,3 +63,4 @@ div.definitionHeader {
 button.saveButton {
   margin-left: auto;
 }
+

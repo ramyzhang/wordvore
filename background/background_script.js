@@ -1,3 +1,5 @@
+import { getRandomInt } from "./random_helper";
+
 browser.runtime.onInstalled.addListener(() => {
     // Callback reads runtime.lastError to prevent an unchecked error from being 
     // logged when the extension attempt to register the already-registered menu 
@@ -17,9 +19,24 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
             text: `${info.selectionText}`
         };
 
+        // choose the word of the day to send
+        let allWords = browser.storage.local.get();
+        var wordOfTheDay;
+        if (allWords.length() == 0) {
+            allWords = null;
+            wordOfTheDay = null;
+        } else {
+            var randomIndex = getRandomInt(0, allWords.length())
+            wordOfTheDay = allWords[randomIndex];
+        }
+        
         // Open the extension popup and send the current selection to it
         browser.action.openPopup().then(() => {
             return browser.storage.local.set({ tempWord });
+        }).then(() => {
+            if (wordOfTheDay) {
+                return browser.storage.local.set({ wordOfTheDay });
+            }
         }).catch((error) => {
             console.error(error);
         });
@@ -50,7 +67,17 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 // otherwise, do nothing because the word's already saved.
             }).catch((err) => {
                 console.error("Couldn't save new word: " + err);
-            })
+            });
+
+            return true;
+        case "getWordOfTheDay":
+            browser.storage.local.get("wordOfTheDay").then((res) => {
+                if (res.wordOfTheDay) {
+                    return sendResponse(res.wordOfTheDay);
+                }
+            }).catch((err) => {
+                console.log("Couldn't get word of the day.");
+            });
 
             return true;
         default:

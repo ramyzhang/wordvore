@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.text) {
             document.getElementById("textField").value = response.text;
         }
+    }).then(() => {
+        return browser.runtime.sendMessage({ action: "getWordOfTheDay" });
+    }).then((res) => {
+        if (res.wordOfTheDay) {
+            document.getElementById("wordOfTheDayDefinition").textContent = res.wordOfTheDay.word;
+        }
     }).catch(() => {
         console.log("Didn't get a word.");
     });
