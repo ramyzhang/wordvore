@@ -1,5 +1,3 @@
-import { getRandomInt } from "./random_helper.js";
-
 browser.runtime.onInstalled.addListener(() => {
     // Callback reads runtime.lastError to prevent an unchecked error from being 
     // logged when the extension attempt to register the already-registered menu 

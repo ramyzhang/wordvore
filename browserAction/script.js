@@ -1,26 +1,40 @@
 import { Word, Meaning, Definition } from "./src/word.js";
 
+const errors = {
+    "err-noWord": "i'm hungry... gimme a word!",
+    "err-wrongWord": "that one doesn't taste right... try again!"
+}
+
 let currentWord;
 
 document.getElementById("wordvore").addEventListener("submit", getDefinition);
 document.getElementById("saveWord").addEventListener("click", sendWordToBackground);
 // If the popup was opened from the context menu, we want to put the word into the input right away
-document.addEventListener('DOMContentLoaded', () => {
-    // Request the selected text from the background script
-    browser.runtime.sendMessage({ action: "getWord" }).then((response) => {
-        if (response.text) {
-            document.getElementById("textField").value = response.text;
-        }
-    }).then(() => {
-        return browser.runtime.sendMessage({ action: "getWordOfTheDay" });
-    }).then((res) => {
+if (document.readyState !== 'loading') {
+    browser.runtime.sendMessage({ action: "getWordOfTheDay" }).then((res) => {
         if (res) {
             return addWordOfTheDay(res);
         }
     }).catch((err) => {
-        console.log("Didn't get a word: " + err);
-    });
-})
+        console.log("Couldn't get WotD: " + err);
+    })
+} else {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Request the selected text from the background script
+        browser.runtime.sendMessage({ action: "getWord" }).then((response) => {
+            if (response.text) {
+                document.getElementById("textField").value = response.text;
+            }
+            return browser.runtime.sendMessage({ action: "getWordOfTheDay" });
+        }).then((res) => {
+            if (res) {
+                return addWordOfTheDay(res);
+            }
+        }).catch((err) => {
+            console.log("Didn't get a word: " + err);
+        });
+    })
+}
 
 // Make dictionary API call to get definition
 function getDefinition(event) {
@@ -146,9 +160,10 @@ function sendWordToBackground() {
 }
 
 function displayError(errorCode, displayBool) {
-    var errorComponent = document.getElementById(errorCode);
+    var errorComponent = document.getElementById('error');
 
     if (displayBool) {
+        errorComponent.textContent = errors[errorCode];
         errorComponent.style.display = "block";
         return;
     } else {
