@@ -36,6 +36,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
 
 // Listen for requests from the popup once it's open to get the stored selected text (if any)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message.action);
     switch (message.action) {
         case "getWord":
             chrome.storage.local.get("tempWord").then((res) => {
@@ -52,7 +53,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 return false;
             });
 
-            break;
+            return true;
         case "saveWord":
             chrome.storage.local.get(message.word.word).then((res) => {                
                 if (!res[message.word.word]) {

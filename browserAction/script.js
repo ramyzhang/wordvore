@@ -11,14 +11,10 @@ document.getElementById("wordvore").addEventListener("submit", getDefinition);
 document.getElementById("saveWord").addEventListener("click", sendWordToBackground);
 
 // If the popup was opened from the context menu, we want to put the word into the input right away
-// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    
-// });
-
 if (document.readyState !== 'loading') {
     console.log("Extension was already loaded.");
-    // TODO: Test GetWord with Chrome
     chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
+        console.log(response);
         if (response.text) {
             document.getElementById("textField").value = response.text;
         }
@@ -27,8 +23,6 @@ if (document.readyState !== 'loading') {
     });
 
     chrome.runtime.sendMessage({ action: "getWordOfTheDay" }).then((res) => {
-        console.log("Sending request for WotD!");
-        console.log(res);
         if (res) {
             return addWordOfTheDay(res);
         }
@@ -37,7 +31,6 @@ if (document.readyState !== 'loading') {
     })
 } else {
     console.log("Not loaded yet.");
-    // TODO: Test WotD with Chrome
     document.addEventListener('DOMContentLoaded', () => {
         // Request the selected text from the background script
         chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
