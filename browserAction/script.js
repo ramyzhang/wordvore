@@ -30,27 +30,6 @@ if (document.readyState !== 'loading') {
         console.log("Couldn't get WotD: " + err);
     })
 } 
-// else {
-//     console.log("Not loaded yet.");
-//     document.addEventListener('DOMContentLoaded', () => {
-//         // Request the selected text from the background script
-//         chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
-//             if (response.text) {
-//                 document.getElementById("textField").value = response.text;
-//             }
-//         }).catch((err) => {
-//             console.log("Didn't get a word: " + err);
-//         });
-    
-//         chrome.runtime.sendMessage({ action: "getWordOfTheDay" }).then((res) => {
-//             if (res) {
-//                 return addWordOfTheDay(res);
-//             }
-//         }).catch((err) => {
-//             console.log("Couldn't get WotD: " + err);
-//         })
-//     })
-// }
 
 // Make dictionary API call to get definition
 function getDefinition(event) {
