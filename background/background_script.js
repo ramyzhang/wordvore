@@ -17,23 +17,15 @@ chrome.contextMenus.onClicked.addListener((info) => {
             text: `${info.selectionText}`
         };
 
-        // choose the word of the day to send
-        var wordOfTheDay;
-        chrome.storage.local.get().then((res) => {
-            if (res.length == 0) {
-                wordOfTheDay = null;
-            } else {
-                var keys = Object.keys(res);
-                wordOfTheDay = res[keys[keys.length * Math.random() << 0]];
-            }
-            return wordOfTheDay;
-        });
-        
-        // Open the extension popup and send the current selection to it
-        chrome.storage.local.set({ tempWord }).then(() => {
+        // choose the word of the day to send, then open the extension popup 
+        // and send the current selected text to it
+        getWordOfTheDay().then((res) => {
+            var wordOfTheDay = res;
             if (wordOfTheDay) {
                 return chrome.storage.local.set({ wordOfTheDay });
             }
+        }).then(() => {
+            return chrome.storage.local.set({ tempWord });
         }).then(() => {
             return chrome.action.openPopup();
         }).catch((error) => {
@@ -49,15 +41,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chrome.storage.local.get("tempWord").then((res) => {
                 if (res.tempWord) {
                     return sendResponse(res.tempWord);
+                } else {
+                    return Promise.reject("No TempWord available.");
                 }
             }).then(() => {
                 // We don't want it to be passing one repeatedly if it was already sent to the popup
                 return chrome.storage.local.remove("tempWord");
             }).catch((error) => {
                 console.log(error);
+                return false;
             });
 
-            return true;
+            break;
         case "saveWord":
             chrome.storage.local.get(message.word.word).then((res) => {                
                 if (!res[message.word.word]) {
@@ -70,9 +65,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
             return true;
         case "getWordOfTheDay":
-            chrome.storage.local.get("wordOfTheDay").then((res) => {
-                if (res.wordOfTheDay) {
-                    return sendResponse(res.wordOfTheDay);
+            getWordOfTheDay().then((res) => {
+                if (res) {
+                    return sendResponse(res);
                 }
             }).catch((err) => {
                 console.log("Couldn't get word of the day.");
@@ -84,3 +79,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+function getWordOfTheDay() {
+    let wordOfTheDay = chrome.storage.local.get().then((res) => {
+        if (res.length == 0) {
+            wordOfTheDay = null;
+        } else {
+            var keys = Object.keys(res);
+            wordOfTheDay = res[keys[keys.length * Math.random() << 0]];
+        }
+        return wordOfTheDay;
+    });
+
+    return wordOfTheDay;
+}
