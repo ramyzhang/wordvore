@@ -11,21 +11,28 @@ document.getElementById("wordvore").addEventListener("submit", getDefinition);
 document.getElementById("saveWord").addEventListener("click", sendWordToBackground);
 // If the popup was opened from the context menu, we want to put the word into the input right away
 if (document.readyState !== 'loading') {
-    browser.runtime.sendMessage({ action: "getWordOfTheDay" }).then((res) => {
+    console.log("Extension was already loaded.");
+    chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
+        if (response.text) {
+            document.getElementById("textField").value = response.text;
+        }
+        return chrome.runtime.sendMessage({ action: "getWordOfTheDay" });
+    }).then((res) => {
         if (res) {
             return addWordOfTheDay(res);
         }
     }).catch((err) => {
-        console.log("Couldn't get WotD: " + err);
-    })
+        console.log("Didn't get a word: " + err);
+    });
 } else {
+    console.log("Not loaded yet.");
     document.addEventListener('DOMContentLoaded', () => {
         // Request the selected text from the background script
-        browser.runtime.sendMessage({ action: "getWord" }).then((response) => {
+        chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
             if (response.text) {
                 document.getElementById("textField").value = response.text;
             }
-            return browser.runtime.sendMessage({ action: "getWordOfTheDay" });
+            return chrome.runtime.sendMessage({ action: "getWordOfTheDay" });
         }).then((res) => {
             if (res) {
                 return addWordOfTheDay(res);
@@ -145,6 +152,7 @@ function addWordOfTheDay(wordObject) {
 
 // Send a message to the background script to save the current word to storage!
 function sendWordToBackground() {
+    console.log("SaveWord was called!");
     if (!currentWord) {
         displayError("err-noWord", true);
         return;
@@ -152,10 +160,11 @@ function sendWordToBackground() {
         displayError("err-noWord", false);
     }
 
-    browser.runtime.sendMessage({ action: "saveWord", word: currentWord }).catch((err) => {
+    chrome.runtime.sendMessage({ action: "saveWord", word: currentWord }).catch((err) => {
         console.error("Wasn't able to send word to background script: " + err);
     });
 
+    document.getElementById("textField").value = "";
     document.body.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     setTimeout(() => {
         document.getElementById("definition").style.display = "none";

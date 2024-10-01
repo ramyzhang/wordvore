@@ -1,3 +1,5 @@
+/* ANIMATIONS */
+
 @keyframes sprite {
   from { background-position: 0px; visibility: visible; }
   to { background-position: -9600px; visibility: hidden; }
@@ -9,12 +11,14 @@
   100%  { scale: 1; }
 }
 
+/* BASIC ELEMENT STYLING */
+
 html {
   min-width: 400px;
   max-width: 400px;
   height: 300px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: clip;
   padding: 0px;
 }
@@ -23,8 +27,9 @@ body {
   padding: 0px;
   margin: 0px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: clip;
+  color: #f6a53a;
 }
 
 textarea {
@@ -85,7 +90,7 @@ div.wordvore {
 }
 
 div.wordOfTheDay {
-  background-color: rgb(255, 252, 248);
+  background-color: #fffcf8;
   width: 80%;
   padding: 10px;
   border-radius: 20px;
@@ -130,3 +135,64 @@ button.saveButton {
   margin-left: auto;
 }
 
+/* SCROLLBAR STYLING */
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fffcf8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffe7c8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffc57a;
+}
+
+/* INPUT STYLING */
+
+input[type=text] {
+  border: 2px dotted #ffe7c8;
+  border-radius: 5px;
+}
+
+input[type=text]:focus {
+  outline: none;
+  border: 2px solid #ffe7c8;
+  border-radius: 5px;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #fff;
+  fill: none;
+  border: 2px solid #ffc57a;
+  border-radius: 5px;
+  color: #ffc57a;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+input[type=button]:focus, input[type=submit]:focus, input[type=reset]:focus {
+  background-color: #ffe7c8;
+  border: 2px solid #ffc57a;
+  border-radius: 5px;
+  color: #ffc57a;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+  background-color: #ffe7c8;
+  border: 2px solid #ffc57a;
+  border-radius: 5px;
+  color: #ffc57a;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
