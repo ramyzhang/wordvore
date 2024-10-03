@@ -9,7 +9,9 @@ export function Meaning(_partOfSpeech, _definitions) {
     this.definitions = _definitions;
 }
 
-export function Definition(_def, _example) {
+export function Definition(_def, _tl, _example, _exampletl) {
     this.def = _def;
+    this.translation = _tl;
     this.example = _example;
+    this.exampleTranslation = _exampletl
 }

@@ -12,7 +12,6 @@ document.getElementById("saveWord").addEventListener("click", sendWordToBackgrou
 
 // If the popup was opened from the context menu, we want to put the word into the input right away
 if (document.readyState !== 'loading') {
-    console.log("Extension was already loaded.");
     chrome.runtime.sendMessage({ action: "getWord" }).then((response) => {
         console.log(response);
         if (response.text) {
@@ -34,6 +33,7 @@ if (document.readyState !== 'loading') {
 // Make dictionary API call to get definition
 function getDefinition(event) {
     event.preventDefault();
+    var lang = document.getElementById("langs").value;
     var word = document.getElementById("textField").value;
 
     if (!word) {
@@ -43,6 +43,31 @@ function getDefinition(event) {
         displayError("err-noWord", false);
     }
 
+    switch (lang) {
+        case "en":
+            getEnglishDefinition(word);
+            return true;
+        case "fr":
+            getLanguageDefinition(word, "fr", true);
+            return true;
+        case "zh":
+            getLanguageDefinition(word, "zh");
+            return true;
+        case "ru":
+            getLanguageDefinition(word, "ru", true);
+            return true;
+        case "es":
+            getLanguageDefinition(word, "es", true);
+            return true;
+        case "ja":
+            // TODO: JAPANESE PARSING SUPPORT
+            return true;
+        default:
+            return false;
+    }
+}
+
+function getEnglishDefinition(word) {
     fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
         .then(response => {
             return response.json();
@@ -57,7 +82,7 @@ function getDefinition(event) {
                 var meanings = [];
                 res[0].meanings.forEach(element => {
                     // we only want the top three definitions for each meaning
-                    var newDefinitions = element.definitions.slice(0, 3).map((x) => new Definition(x.definition, x.example));
+                    var newDefinitions = element.definitions.slice(0, 3).map((x) => new Definition(x.definition, "", x.example, ""));
                     meanings.push(new Meaning(element.partOfSpeech, newDefinitions));
                 });
                 var newWord = new Word(res[0].word, res[0].phonetic, meanings);
@@ -69,8 +94,61 @@ function getDefinition(event) {
         .catch(error => {
             console.error(error);
         });
-    
-    return false;
+}
+
+function getLanguageDefinition(word, language, phonetics = false) {
+    fetch(`https://lexicala1.p.rapidapi.com/search-entries?text=${word}&language=${language}`, {
+        headers: {
+            "x-rapidapi-key": "2905199affmsha619c7b66f660b8p19fcb4jsn16271a5318e8",
+            "x-rapidapi-host": "lexicala1.p.rapidapi.com"
+        }
+    })
+        .then(response => {
+            console.log(response);
+            return response.json();
+        })
+        .then(res => {
+            console.log(res);
+            if (!res.results || !res.results[0]) {
+                displayError("err-wrongWord", true);
+                return false;
+            } else {
+                displayError("err-wrongWord", false);
+
+                var meanings = [];
+                res.results.forEach(element => {
+                    // we only want the top three definitions for each meaning
+                    var newDefinitions = element.senses.slice(0, 3).map((x) => { 
+                            new Definition(
+                                x.definition,
+                                x.translations.en.text,
+                                x.examples[0].text,
+                                x.examples[0].translations.en.text
+                            );
+                        });
+                    meanings.push(new Meaning(element.headword.pos, newDefinitions));
+                });
+                
+                var pronounciation = "";
+                if (phonetics) {
+                    if (res.results[0].headword.pronunciation) {
+                        pronounciation = res.results[0].headword.pronunciation.value;
+                    }
+                } else {
+                    if (res.results[0].headword.alternative_scripts) {
+                        pronounciation = res.results[0].headword.alternative_scripts[0].text;
+                    }
+                }
+
+                var newWord = new Word(res.results[0].headword.text, pronounciation, meanings);
+                addDefinitions(newWord);
+                currentWord = newWord;
+                document.getElementById("saveWord").style.display = "block";
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 // Display the definition in the popup

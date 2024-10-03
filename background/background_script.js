@@ -80,6 +80,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+// Randomly selects a word from your storage
 function getWordOfTheDay() {
     let wordOfTheDay = chrome.storage.local.get().then((res) => {
         if (res.length == 0) {
