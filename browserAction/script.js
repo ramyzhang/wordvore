@@ -83,7 +83,7 @@ function getEnglishDefinition(word) {
                 res[0].meanings.forEach(element => {
                     // we only want the top three definitions for each meaning
                     var newDefinitions = element.definitions.slice(0, 3).map((x) => new Definition(x.definition, "", x.example, ""));
-                    meanings.push(new Meaning(element.partOfSpeech, newDefinitions));
+                    meanings.push(new Meaning(element.partOfSpeech, "", newDefinitions));
                 });
                 var newWord = new Word(res[0].word, res[0].phonetic, meanings);
                 addDefinitions(newWord);
@@ -97,14 +97,14 @@ function getEnglishDefinition(word) {
 }
 
 function getLanguageDefinition(word, language, phonetics = false) {
-    fetch(`https://lexicala1.p.rapidapi.com/search-entries?text=${word}&language=${language}`, {
+    var text = encodeURI(word);
+    fetch(`https://lexicala1.p.rapidapi.com/search-entries?text=${text}&language=${language}`, {
         headers: {
             "x-rapidapi-key": "2905199affmsha619c7b66f660b8p19fcb4jsn16271a5318e8",
             "x-rapidapi-host": "lexicala1.p.rapidapi.com"
         }
     })
         .then(response => {
-            console.log(response);
             return response.json();
         })
         .then(res => {
@@ -119,14 +119,29 @@ function getLanguageDefinition(word, language, phonetics = false) {
                 res.results.forEach(element => {
                     // we only want the top three definitions for each meaning
                     var newDefinitions = element.senses.slice(0, 3).map((x) => { 
-                            new Definition(
+                            if (!x.definition) {
+                                return null;
+                            }
+
+                            var tl = "";
+                            if (x.translations && x.translations.en) {
+                                tl = x.translations.en.text ?? x.translations.en[0].text;
+                            }
+
+                            var extl = "";
+                            if (x.examples && x.examples[0].translations && x.examples[0].translations.en) {
+                                extl = x.examples[0].translations.en.text ?? x.examples[0].translations.en[0].text;
+                            }
+
+                            return new Definition(
                                 x.definition,
-                                x.translations.en.text,
-                                x.examples[0].text,
-                                x.examples[0].translations.en.text
+                                tl,
+                                x.examples ? x.examples[0].text : "",
+                                extl,
                             );
                         });
-                    meanings.push(new Meaning(element.headword.pos, newDefinitions));
+                    newDefinitions = newDefinitions.filter((x) => x !== null);
+                    meanings.push(new Meaning(element.headword.pos, element.headword.gender ?? "", newDefinitions));
                 });
                 
                 var pronounciation = "";
@@ -163,18 +178,20 @@ function addDefinitions(definitions) {
     definitions.meanings.forEach(meaning => {
         const newPoS = document.createElement("p");
         newPoS.className = "pos";
-        newPoS.textContent = meaning.partOfSpeech;
+        newPoS.textContent = meaning.gender ? meaning.partOfSpeech + ", " + meaning.gender : meaning.partOfSpeech;
         meaningsComponent.appendChild(newPoS);
         const meaningsList = document.createElement("ol");
         meaning.definitions.forEach(defn => {
             const li = document.createElement("li");
-            const newDef = document.createTextNode("def. " + defn.def);
+            var defString = defn.translation ? "def. " + defn.def + " // " + defn.translation : "def. " + defn.def;
+            const newDef = document.createTextNode(defString);
             li.appendChild(newDef);
 
             if (defn.example) {
                 const ul = document.createElement("ul");
                 const subli = document.createElement("li");
-                subli.textContent = "ex. " + defn.example;
+                var exString = defn.exampleTranslation ? "ex. " + defn.example + " // " + defn.exampleTranslation : "ex. " + defn.example;
+                subli.textContent = exString;
                 ul.appendChild(subli);
                 li.appendChild(ul);
             }
@@ -198,15 +215,18 @@ function addWordOfTheDay(wordObject) {
     var randomMeaning = wordObject.meanings[wordObject.meanings.length * Math.random() << 0];
     var randomDefn = randomMeaning.definitions[randomMeaning.definitions.length * Math.random() << 0];
 
-    wotdMeaning.innerHTML += `<i>${randomMeaning.partOfSpeech}</i> | `;
+    var posHtml = randomMeaning.gender ? `<i>${randomMeaning.partOfSpeech}, ${randomMeaning.gender}</i> | ` : `<i>${randomMeaning.partOfSpeech}</i> | `;
+    wotdMeaning.innerHTML += posHtml;
     
-    const defComponent = document.createTextNode("def. " + randomDefn.def);
+    var defString = randomDefn.translation ? "def. " + randomDefn.def + " // " + randomDefn.translation : "def. " + randomDefn.def;
+    const defComponent = document.createTextNode(defString);
     wotdMeaning.appendChild(defComponent);
 
     if (randomDefn.example) {
         const ul = document.createElement("ul");
         const subli = document.createElement("li");
-        subli.textContent = "ex. " + randomDefn.example;
+        var exString = randomDefn.exampleTranslation ? "ex. " + randomDefn.example + " // " + randomDefn.exampleTranslation : "ex. " + randomDefn.example;
+        subli.textContent = exString;
         ul.appendChild(subli);
         wotdMeaning.appendChild(ul);
     }

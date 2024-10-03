@@ -4,8 +4,9 @@ export function Word(_word, _phonetics, _meanings) {
     this.meanings = _meanings;
 }
 
-export function Meaning(_partOfSpeech, _definitions) {
+export function Meaning(_partOfSpeech, _gender, _definitions) {
     this.partOfSpeech = _partOfSpeech;
+    this.gender = _gender;
     this.definitions = _definitions;
 }
 
