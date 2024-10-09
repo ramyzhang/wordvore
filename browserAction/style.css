@@ -166,7 +166,7 @@ input[type=text] {
 
 input[type=text]:focus {
   outline: none;
-  border: 2px solid #ffe7c8;
+  border: 2px solid #ffc57a;
   border-radius: 5px;
 }
 
@@ -200,4 +200,20 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover, but
 
 button.saveButton {
   margin-left: auto;
+}
+
+/** SELECT DROPDOWN STYLING **/
+
+select.langSelect {
+  border: 2px solid #ffc57a;
+  border-radius: 5px;
+  color: #ffc57a;
+}
+
+select.langSelect:hover {
+  background-color: #ffe7c8;
+}
+
+select.langSelect option {
+  background-color: #fff;
 }
