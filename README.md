@@ -3,6 +3,7 @@
 Wordvore is an extension I made for personal & friends-and-family use. The version in the repo works for Chrome only, but I have tested and run a version for Firefox as well. I haven't tested the logic with other browsers.
 
 ### Features
+- Uses Manifest V3
 - Adds a context menu item to Chrome and Firefox so you can automatically send selected words on any webpage to Wordvore
 - Multi-language support: EN, FR, ES, RU, ZH (limited and doesn't work super reliably); includes grammatical gender and phonetics
 - Saves words exclusively in browser local storage
