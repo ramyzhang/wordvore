@@ -100,7 +100,7 @@ function getLanguageDefinition(word, language, phonetics = false) {
     var text = encodeURI(word);
     fetch(`https://lexicala1.p.rapidapi.com/search-entries?text=${text}&language=${language}`, {
         headers: {
-            "x-rapidapi-key": "2905199affmsha619c7b66f660b8p19fcb4jsn16271a5318e8",
+            "x-rapidapi-key": "YOUR-KEY-HERE",
             "x-rapidapi-host": "lexicala1.p.rapidapi.com"
         }
     })
@@ -162,7 +162,7 @@ function getLanguageDefinition(word, language, phonetics = false) {
             }
         })
         .catch(error => {
-            console.error(error);
+            console.error("Failed to retrieve word from Lexicala: " + error);
         });
 }
 
