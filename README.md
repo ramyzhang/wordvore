@@ -11,6 +11,6 @@ Wordvore is an extension I made for personal & friends-and-family use. The versi
 - Handmade Wordvore monster animation drawn by me! :P
 
 ### Screenshots
-![Screenshot 2024-10-11 105812](https://github.com/user-attachments/assets/a6c5292d-09f5-48e9-b94e-a3814c3fd0f3)
-![Screenshot 2024-10-11 105824](https://github.com/user-attachments/assets/be028ebf-b348-401c-9661-0a8f2026b78d)
-![Screenshot 2024-10-11 110017](https://github.com/user-attachments/assets/6d640b54-add2-403c-8791-202fe3447a45)
+<img src="https://github.com/user-attachments/assets/a6c5292d-09f5-48e9-b94e-a3814c3fd0f3" alt="sc-1" width="400px"/>
+<img src="https://github.com/user-attachments/assets/be028ebf-b348-401c-9661-0a8f2026b78d" alt="sc-2" width="400px"/>
+<img src="https://github.com/user-attachments/assets/6d640b54-add2-403c-8791-202fe3447a45" alt="sc-3" width="400px"/>
