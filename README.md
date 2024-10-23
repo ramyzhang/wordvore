@@ -1,6 +1,13 @@
 ## Meet Wordvore!
 
-Wordvore is an extension I made for personal & friends-and-family use. The version in the repo works for Chrome only, but I have tested and run a version for Firefox as well. I haven't tested the logic with other browsers.
+Wordvore is an extension I made for personal & friends-and-family use. The version in the repo currently works for Chrome only, but I have tested and run a version for Firefox as well (it just uses different variable names for the extension API endpoints). I haven't tested the logic with other browsers.
+
+### Usage
+This can be used as-is for English words, but if you want to save words in other languages, you'll have to get your own Lexicala API key (the free tier offers 50 calls per day).
+1. Navigate to the directory that you want to save this extension in, and clone the repo there: `git clone https://github.com/ramyzhang/wordvore.git`.
+2. Enter the directory and navigate to `browserAction/script.js`.
+3. In line 103, where it says `"YOUR-KEY-HERE"`, replace the contents inside the quotation marks with your own key from [Lexicala](https://api.lexicala.com/).
+4. Save, then load it unpacked into Chrome.
 
 ### Features
 - Uses Manifest V3
