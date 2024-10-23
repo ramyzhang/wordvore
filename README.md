@@ -4,8 +4,8 @@ Wordvore is an extension I made for personal & friends-and-family use. The versi
 
 ### Usage
 This can be used as-is for English words, but if you want to save words in other languages, you'll have to get your own Lexicala API key (the free tier offers 50 calls per day).
-1. Navigate to the directory that you want to save this extension in, and clone the repo there.
-   ```git clone https://github.com/ramyzhang/wordvore.git```
+1. Navigate to the directory that you want to save this extension in.
+2. Clone the repo there: `git clone https://github.com/ramyzhang/wordvore.git`
 3. Enter the directory and navigate to `browserAction/script.js`.
 4. In line 103, where it says `"YOUR-KEY-HERE"`, replace the contents inside the quotation marks with your own key from [Lexicala](https://api.lexicala.com/).
 5. Save, then load it unpacked into Chrome.
