@@ -3,8 +3,10 @@
 Wordvore is an extension I made for personal & friends-and-family use. The version in the repo currently works for Chrome only, but I have tested and run a version for Firefox as well (it just uses different variable names for the extension API endpoints). I haven't tested the logic with other browsers.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/34625981/230788839-94bb688a-f72a-48a9-b64f-bb3f963be035.gif" alt="Wordvore GIF Demo" width="500">
+  <img src="https://github.com/user-attachments/assets/fe72d00f-a28d-40fc-919d-4c683a6ec6e5" alt="Wordvore GIF Demo" width="500">
 </p>
+
+
 
 ### Usage
 This can be used as-is for English words, but if you want to save words in other languages, you'll have to get your own Lexicala API key (the free tier offers 50 calls per day).
